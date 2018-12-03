@@ -5,29 +5,27 @@ Brandon Taylor, PE
 December, 2018
 
 """
-import eel
+
 import os
 import shutil
 import errno
 import random
 
+# import eel
+# eel.init('web')
 
-eel.init('web')
 
-
-# INPUT_FOLDER = '\\media\\pi\\My Disc\\Media\\'
-# OUTPUT_FOLDER = '\\home\\pi\\DVDBackups\\'
-INPUT_FOLDER = 'C:\\Users\\Brandon\\Documents\\repos\\bt_eel\\data\\input'
-OUTPUT_FOLDER = 'C:\\Users\\Brandon\\Documents\\repos\\bt_eel\\data\\output\\'
+INPUT_FOLDER = '\\media\\pi\\'
+OUTPUT_FOLDER = '\\home\\pi\\DVDBackups\\'
 
 
 
-@eel.expose
+# @eel.expose
 def print_string(x):
     print('String Provided: {}'.format(x))
 
 
-@eel.expose
+# @eel.expose
 def pick_file(folder):
     if os.path.isdir(folder):
         return random.choice(os.listdir(folder))
@@ -58,9 +56,9 @@ def timestamp():
     return timestamp
 
 def copy(src, dest):
-    print('inside copy')
+
     try:
-        shutil.copytree(src, dest)
+        shutil.copy(src, dest)
     except OSError as e:
         # If the error was caused because the source wasn't a directory
         if e.errno == errno.ENOTDIR:
@@ -70,7 +68,7 @@ def copy(src, dest):
 
 
 
-@eel.expose
+# @eel.expose
 def backup_drive(input, output):
 
     # Determine If Directories Exist
@@ -84,16 +82,16 @@ def backup_drive(input, output):
     if not os.path.exists(outputfinal):
         copy(input, outputfinal)
     else:
-        print('Directory Already Exists.  Wait a Minute.')
+        print('Directory Already Exists.  Wait a Minute (literally).')
 
 
 def main():
     # eel.start('index.html')
     # eel.start('file_access.html', size=(320, 120))
 
-    eel.start('backup_drive.html', size=(360, 120))
+    # eel.start('backup_drive.html', size=(360, 120))
 
-    # val = backup_drive(INPUT_FOLDER, OUTPUT_FOLDER)
+    val = backup_drive(INPUT_FOLDER, OUTPUT_FOLDER)
 
 
 
