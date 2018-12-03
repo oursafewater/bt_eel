@@ -5,8 +5,9 @@
         <script type='text/javascript' src='/eel.js'></script>
         <script type='text/javascript'>
 
-        async function pick_file() {
+        async function backup_drive(input_output) {
             let folder = document.getElementById('input-box').value;
+            let
             let file_div = document.getElementById('file-name');
 
             // Call into Python so we can access the file system
@@ -18,7 +19,8 @@
     </head>
 
     <body>
-        <input id='input-box' placeholder='Type folder here' value='C:\Windows'></input>
+        <input id='input-box' placeholder='Input Placeholder' value='Input Path'></input>
+        <input id='output-box' placeholder='Output Placeholder' value='Output Path'></input>
         <a href='javascript:void()' onclick='pick_file()'> Backup DVD Drive </a>
         <div id='file-name'></div>
     </body>

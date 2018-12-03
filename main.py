@@ -7,12 +7,19 @@ December, 2018
 """
 import eel
 import os
+import shutil
+import errno
 import random
 
 
-BACKUP_FOLDER = '\\FILEPATH\\'
-
 eel.init('web')
+
+
+# INPUT_FOLDER = '\\media\\pi\\My Disc\\Media\\'
+# OUTPUT_FOLDER = '\\home\\pi\\DVDBackups\\'
+INPUT_FOLDER = 'C:\\Users\\Brandon\\Documents\\repos\\bt_eel\\data\\input'
+OUTPUT_FOLDER = 'C:\\Users\\Brandon\\Documents\\repos\\bt_eel\\data\\output\\'
+
 
 
 @eel.expose
@@ -27,24 +34,67 @@ def pick_file(folder):
     else:
         return 'Not valid folder'
 
+def timestamp():
+
+    from datetime import datetime
+
+    # Create TimeStamp (eg. 1201_1850)
+    month = str(datetime.now().month)
+    day = str(datetime.now().day)
+    hour = str(datetime.now().hour)
+    minute = str(datetime.now().minute)
+
+    if len(month) == 1:
+        month = '0' + month
+    if len(day) == 1:
+        day = '0' + day
+    if len(hour) == 1:
+        hour = '0' + hour
+    if len(minute) == 1:
+        minute = '0' + minute
+
+    timestamp = month + day + '_' + hour + minute
+
+    return timestamp
+
+def copy(src, dest):
+    print('inside copy')
+    try:
+        shutil.copytree(src, dest)
+    except OSError as e:
+        # If the error was caused because the source wasn't a directory
+        if e.errno == errno.ENOTDIR:
+            shutil.copy(src, dest)
+        else:
+            print('Directory not copied. Error: %s' % e)
+
+
 
 @eel.expose
-def backup_dvd(letter):
+def backup_drive(input, output):
 
-    drive_found = os.system("vol %s: 2>nul>nul" % letter) == 0
+    # Determine If Directories Exist
+    inputqc = os.path.isdir(input)
+    outputqc = os.path.isdir(output)
 
-    if drive_found:
-        print('{}:\ Found'.format(letter))
+    # Build Final Folder Name
+    outputfinal = output + timestamp()
+
+    # Copy Files If Directory Does Not Already Exist
+    if not os.path.exists(outputfinal):
+        copy(input, outputfinal)
+    else:
+        print('Directory Already Exists.  Wait a Minute.')
 
 
 def main():
     # eel.start('index.html')
     # eel.start('file_access.html', size=(320, 120))
 
-    eel.start('backup_dvd.html', size=(360, 120))
+    eel.start('backup_drive.html', size=(360, 120))
 
-    val = backup_dvd('C')
-    # print(val)
+    # val = backup_drive(INPUT_FOLDER, OUTPUT_FOLDER)
+
 
 
 if __name__ == '__main__':
